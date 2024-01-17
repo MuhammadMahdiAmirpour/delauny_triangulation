@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from point import Point
 
 class TriangleObj(object):
@@ -30,74 +31,32 @@ class TriangleObj(object):
                             [cdx, cdy, cdxy]])
         return np.linalg.det(matrice) > 0
 
-    # Function to find the line given two points
-    def lineFromPoints(P, Q, a, b, c):
-        a = Q[1] - P[1]
-        b = P[0] - Q[0]
-        c = a * (P[0]) + b * (P[1])
-        return a, b, c
-     
-    # Function which converts the input line to its
-    # perpendicular bisector. It also inputs the points
-    # whose mid-point lies on the bisector
-    def perpendicularBisectorFromLine(P, Q, a, b, c):
-        mid_point = [(P[0] + Q[0])//2, (P[1] + Q[1])//2]
-        # c = -bx + ay
-        c = -b * (mid_point[0]) + a * (mid_point[1])
-        temp = a
-        a = -b
-        b = temp
-        return a, b, c
-     
-    # Returns the intersection point of two lines
-    def lineLineIntersection(a1, b1, c1, a2, b2, c2):
-        determinant = a1 * b2 - a2 * b1
-        if (determinant == 0):
-           
-            # The lines are parallel. This is simplified
-            # by returning a pair of (10.0)**19
-            return [(10.0)**19, (10.0)**19]
-        else:
-            x = (b2 * c1 - b1 * c2)//determinant
-            y = (a1 * c2 - a2 * c1)//determinant
-            return [x, y]
-     
-    def findCircumCenter(P, Q, R):
-       
-        # Line PQ is represented as ax + by = c
-        a, b, c = 0.0, 0.0, 0.0
-        a, b, c = lineFromPoints(P, Q, a, b, c)
-     
-        # Line QR is represented as ex + fy = g
-        e, f, g = 0.0, 0.0, 0.0
-        e, f, g = lineFromPoints(Q, R, e, f, g)
-     
-        # Converting lines PQ and QR to perpendicular
-        # vbisectors. After this, L = ax + by = c
-        # M = ex + fy = g
-        a, b, c = perpendicularBisectorFromLine(P, Q, a, b, c)
-        e, f, g = perpendicularBisectorFromLine(Q, R, e, f, g)
-     
-        # The point of intersection of L and M gives
-        # the circumcenter
-        circumcenter = lineLineIntersection(a, b, c, e, f, g)
-     
-        if (circumcenter[0] == (10.0)**19 and circumcenter[1] == (10.0)**19):
-            print("The two perpendicular bisectors found come parallel")
-            print("Thus, the given points do not form a triangle and are collinear")
-        else:
-            print("The circumcenter of the triangle PQR is: ", end="")
-            print("(", circumcenter[0], ",", circumcenter[1], ")")
+    def is_in_cricumcircle_check_by_radius(self, other_point: Point) -> bool:
+        center = self.get_circumcenter()
+        radius = self.get_circumradius()
+        return center.distance(other_point) > radius
 
     def get_circumcenter(self) -> Point:
         """
         find the coordinates of circumcenter of the triangle object
         got the idea from the link below:
-        https://www.geeksforgeeks.org/program-find-circumcenter-triangle-2/
+        https://stackoverflow.com/questions/56224824/how-do-i-find-the-circumcenter-of-the-triangle-using-python-without-external-lib
         """
-        pass
+        ax = self.a.x
+        bx = self.b.x
+        cx = self.c.x
+        ay = self.a.y
+        by = self.b.y
+        cy = self.c.y
+        d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
+        ux = ((ax * ax + ay * ay) * (by - cy) + (bx * bx + by * by) * (cy - ay) + (cx * cx + cy * cy) * (ay - by)) / d
+        uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d
+        return (ux, uy)
 
-    def get_circumradius(self) -> Point:
-        pass
-
+    def get_circumradius(self) -> float:
+        """
+        returns the circumradius of the triangle
+        just get the distance from one of the points from the center
+        """
+        return self.a.distance(self.get_circumcenter())
 
