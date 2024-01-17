@@ -1,5 +1,5 @@
 import math
-class Point(object):
+class Vertex(object):
     def __init__(self, x:float, y:float) -> None:
         self.x = x
         self.y = y
@@ -10,8 +10,10 @@ class Point(object):
     def __mul__(self, other):
         return self.x * other.x + self.y * other.y
 
+    __rmul__ = __mul__
+
     def __str__(self) -> str:
-        return "Point(%s, %s)"%(self.x, self.y)
+        return "Vertex(%s, %s)"%(self.x, self.y)
     
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
@@ -20,7 +22,7 @@ class Point(object):
         return (self.x - other.x, self.y - other.y)
 
     def __add__(self, other):
-        return Point(self.x + other.x, self.y + other.y)
+        return Vertex(self.x + other.x, self.y + other.y)
 
     def distance(self, other):
         dist_obj = self - other

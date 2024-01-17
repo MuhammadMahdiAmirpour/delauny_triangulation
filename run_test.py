@@ -2,17 +2,22 @@ import random
 from delaunay_triangulator import DelaunayTriangulator
 from vertex import Vertex
 
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
 
 if __name__ == "__main__":
+    radius = 100
+    data = np.loadtxt("test_dir/test.txt", dtype=np.float64)
+    xs = data[:, 0] * radius
+    ys = data[:, 1] * radius
     WIDTH = int(100)
     HEIGHT = int(100)
-    n = 21  # n should be greater than 2
+    # n = 21  # n should be greater than 2
 
-    xs = [random.randint(1, WIDTH - 1) for _ in range(n)]
-    ys = [random.randint(1, HEIGHT - 1) for _ in range(n)]
-    zs = [0 for _ in range(n)]
+    # xs = [random.randint(1, WIDTH - 1) for _ in range(n)]
+    # ys = [random.randint(1, HEIGHT - 1) for _ in range(n)]
+    # zs = [0 for _ in range(n)]
 
     DT = DelaunayTriangulator(WIDTH, HEIGHT)
     for x, y in zip(xs, ys):

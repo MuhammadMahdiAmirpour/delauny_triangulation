@@ -1,17 +1,36 @@
 import numpy as np
 import math
-from point import Point
+from vertex import Vertex
+from edge import Edge
 
 class TriangleObj(object):
-    def __init__(self, a: Point, b: Point, c: Point) -> None:
+    def __init__(self, a: Vertex, b: Vertex, c: Vertex) -> None:
         self.a = a
         self.b = b
         self.c = c
+        self.vertex_list = [a, b, c]
+        self.edges = [Edge(a, b),
+                      Edge(a, c),
+                      Edge(b, c)]
+        self.neighbour = [None] * 3
+
+    def hasVertex(self, vertex: Vertex):
+        return self.a == vertex or self.b == vertex or self.c == vertex
     
     def __str__(self) -> str:
         return f"Triangle(a:{self.a}, b:{self.b}, c:{self.c})"
 
-    def is_in_cricumcircle(self, other_point: Point) -> bool:
+    def __repr__(self):
+        '''
+        return '<%s, [%s, %s, %s]>' % (
+                hex(id(s)),
+                hex(id(s.neighbour[0])),
+                hex(id(s.neighbour[1])),
+                hex(id(s.neighbour[2])))
+        '''
+        return '< ' + str(self.a) + str(self.b) + str(self.c) + ' >'
+
+    def is_in_cricumcircle(self, other_point: Vertex) -> bool:
         """
         checks if the other_point is in the circumcircle of the triangle object
         I got the idea from this link:
@@ -20,8 +39,8 @@ class TriangleObj(object):
         adx = self.a.x - other_point.x
         ady = self.a.y - other_point.y
         adxy = adx ** 2 + ady ** 2
-        bdx = self.b.x - self.d.x
-        bdy = self.b.y - self.d.y
+        bdx = self.b.x - other_point.x
+        bdy = self.b.y - other_point.y
         bdxy = bdx ** 2 + bdy ** 2
         cdx = self.c.x - other_point.x
         cdy = self.c.y - other_point.y
@@ -31,12 +50,12 @@ class TriangleObj(object):
                             [cdx, cdy, cdxy]])
         return np.linalg.det(matrice) > 0
 
-    def is_in_cricumcircle_check_by_radius(self, other_point: Point) -> bool:
+    def is_in_cricumcircle_check_by_radius(self, other_point: Vertex) -> bool:
         center = self.get_circumcenter()
         radius = self.get_circumradius()
         return center.distance(other_point) > radius
 
-    def get_circumcenter(self) -> Point:
+    def get_circumcenter(self) -> Vertex:
         """
         find the coordinates of circumcenter of the triangle object
         got the idea from the link below:
