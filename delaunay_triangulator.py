@@ -29,19 +29,25 @@ class DelaunayTriangulator(object):
 
         # Routine is to find the convex hull of bad triangles
         # This involves a naive search method, which increases the time complexity
-        for current_triangle in bad_triangles:
-            for this_edge in current_triangle.edges:
-                isNeighbour = False
-                for other_triangle in bad_triangles:
-                    if current_triangle == other_triangle:
-                        continue
-                    for that_edge in other_triangle.edges:
-                        if this_edge == that_edge:
-                            # Check if the Edge is shared between two triangles
-                            # If the edge is shared it won't be included into the convex hull
-                            isNeighbour = True
-                if not isNeighbour:
-                    polygon.append(this_edge)
+        for triangle in bad_triangles:
+            for edge in triangle.edges:
+                if edge not in polygon:
+                    polygon.append(edge)
+                elif edge in polygon:
+                    polygon.remove(edge)
+#         for current_triangle in bad_triangles:
+#             for this_edge in current_triangle.edges:
+#                 isNeighbour = False
+#                 for other_triangle in bad_triangles:
+#                     if current_triangle == other_triangle:
+#                         continue
+#                     for that_edge in other_triangle.edges:
+#                         if this_edge == that_edge:
+#                             # Check if the Edge is shared between two triangles
+#                             # If the edge is shared it won't be included into the convex hull
+#                             isNeighbour = True
+#                 if not isNeighbour:
+#                     polygon.append(this_edge)
 
         # Delete the bad triangles
         for each_triangle in bad_triangles:
