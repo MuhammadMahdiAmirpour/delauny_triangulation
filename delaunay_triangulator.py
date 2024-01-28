@@ -68,44 +68,7 @@ class DelaunayTriangulator(object):
         x_s = [p.x for p in ps]
         y_s = [p.y for p in ps]
 
-        # xs = list(set(xs))
-        # ys = list(set(ys))
-
         ts = [(ps.index(t.a), ps.index(t.b), ps.index(t.c)) for t in self.triangulation]
 
         return x_s, y_s, ts
-
-    def Find_Neighbours(self):
-        # Function to find the neighbours of the Delaunay triangles
-        for one in self.triangulation:
-            edge = 0
-            for this_edge in one.edges:
-                edge = (edge + 1) % 3
-                for other in self.triangulation:
-                    if one == other:
-                        continue
-                    for that_edge in other.edges:
-                        if this_edge == that_edge:
-                            one.neighbour[edge] = other
-
-#     def find_lexicograiphically_highest_point(self):
-#         return max(self.seeds, key=lambda x: (x[0], -x[1]))
-# 
-#     def super_triangle(self, vertices: list) -> TriangleObj:
-#         minx = miny = sys.float_info.max
-#         maxx = maxy = sys.float_info.min
-#         for vertex in vertices:
-#             minx = min(minx, vertex.x)
-#             miny = min(miny, vertex.y)
-#             maxx = max(maxx, vertex.x)
-#             maxy = max(maxy, vertex.y)
-#         dx = (maxx - minx) * 10
-#         dy = (maxy - miny) * 10
-#         v0 = Vertex(minx - dx, miny - dy * 3)
-#         v1 = Vertex(minx - dx, miny + dy)
-#         v2 = Vertex(minx + dx * 3, miny + dy)
-#         return TriangleObj(v0, v1, v2)
-
-#     def triangulate(self, vertices: list) -> list:
-#         pass
 

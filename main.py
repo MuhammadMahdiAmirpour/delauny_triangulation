@@ -8,7 +8,7 @@ import matplotlib.tri as tri
 if __name__ == "__main__":
     WIDTH = int(100)
     HEIGHT = int(100)
-    n = 21  # n should be greater than 2
+    n =  21 # n should be greater than 2
 
     xs = [random.randint(1, WIDTH - 1) for _ in range(n)]
     ys = [random.randint(1, HEIGHT - 1) for _ in range(n)]
@@ -20,10 +20,6 @@ if __name__ == "__main__":
 
     # Remove the super triangle on the outside
     DT.Remove_Super_Triangles()
-
-    # Helps in determining the neighbours of triangles. I felt it might help in the future
-    # Remove this to speed up triangle generation
-    DT.Find_Neighbours()
 
     XS, YS, TS = DT.export()
 

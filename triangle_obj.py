@@ -1,5 +1,4 @@
 import numpy as np
-import math
 from vertex import Vertex
 from edge import Edge
 
