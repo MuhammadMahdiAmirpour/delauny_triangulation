@@ -14,7 +14,6 @@ if __name__ == "__main__":
     time_list = []
 
     for n in ns:
-        print(n)
         start = time.time()
 
         xs = [random.randint(1, WIDTH - 1) for _ in range(n)]
