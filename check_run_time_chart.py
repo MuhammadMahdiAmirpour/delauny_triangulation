@@ -1,8 +1,9 @@
-import random
 from delaunay_triangulator import DelaunayTriangulator
 from vertex import Vertex
 
 import time
+
+import numpy as np
 
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
@@ -10,20 +11,17 @@ import matplotlib.tri as tri
 if __name__ == "__main__":
     WIDTH = int(100)
     HEIGHT = int(100)
-    ns = range(4, 51)  # n should be greater than 2
+    ns = range(3, 50)  # n should be greater than 2
     time_list = []
+    data = np.loadtxt("test_dir/test.txt", dtype=np.float64) * HEIGHT
 
     for n in ns:
         times = []
-        for _ in range(5):
+        for _ in range(10):
             start = time.time()
 
-            xs = [random.randint(1, WIDTH - 1) for _ in range(n)]
-            ys = [random.randint(1, HEIGHT - 1) for _ in range(n)]
-            zs = [0 for _ in range(n)]
-
             DT = DelaunayTriangulator(WIDTH, HEIGHT)
-            for x, y in zip(xs, ys):
+            for x, y in data[:n]:
                 DT.AddVertex(Vertex(x, y))
 
             # Remove the super triangle on the outside
@@ -38,7 +36,6 @@ if __name__ == "__main__":
 
             end = time.time()
             times.append(end-start)
-        print(len(times))
         time_list.append(sum(times)/len(times))
 
     # Plot the triangulation.

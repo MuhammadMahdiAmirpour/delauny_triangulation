@@ -29,30 +29,10 @@ class TriangleObj(object):
         '''
         return '< ' + str(self.a) + str(self.b) + str(self.c) + ' >'
 
-    def is_in_cricumcircle(self, other_point: Vertex) -> bool:
-        """
-        checks if the other_point is in the circumcircle of the triangle object
-        I got the idea from this link:
-        https://stackoverflow.com/questions/39984709/how-can-i-check-wether-a-point-is-inside-the-circumcircle-of-3-points
-        """
-        adx = self.a.x - other_point.x
-        ady = self.a.y - other_point.y
-        adxy = adx ** 2 + ady ** 2
-        bdx = self.b.x - other_point.x
-        bdy = self.b.y - other_point.y
-        bdxy = bdx ** 2 + bdy ** 2
-        cdx = self.c.x - other_point.x
-        cdy = self.c.y - other_point.y
-        cdxy = adx ** 2 + ady ** 2
-        matrice = np.array([[adx, ady, adxy],
-                            [bdx, bdy, bdxy],
-                            [cdx, cdy, cdxy]])
-        return np.linalg.det(matrice) > 0
-
     def is_in_cricumcircle_check_by_radius(self, other_point: Vertex) -> bool:
         center = self.get_circumcenter()
         radius = self.get_circumradius()
-        return center.distance(other_point) > radius
+        return center.distance(other_point) < radius
 
     def get_circumcenter(self) -> Vertex:
         """
@@ -66,10 +46,10 @@ class TriangleObj(object):
         ay = self.a.y
         by = self.b.y
         cy = self.c.y
-        d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
-        ux = ((ax * ax + ay * ay) * (by - cy) + (bx * bx + by * by) * (cy - ay) + (cx * cx + cy * cy) * (ay - by)) / d
-        uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d
-        return (ux, uy)
+        d = 2 * ((ax-bx)*(by-cy) - (bx-cx)*(ay-by))
+        ux = ((ax**2 + ay**2)*(by-cy)+(bx**2+by**2)*(cy-ay)+(cx**2+cy**2)*(ay-by))/d
+        uy = ((ax**2 + ay**2)*(cx-bx)+(bx**2+by**2)*(ax-cx)+(cx**2+cy**2)*(bx-ax))/d
+        return Vertex(ux, uy)
 
     def get_circumradius(self) -> float:
         """
